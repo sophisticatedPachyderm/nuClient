@@ -32,7 +32,6 @@ sendAuthCheck = (username, password, context) => {
   })
   .then((incoming) => {
     openMyGamesScreen(incoming[0], incoming[1]);
-    console.log('success');
   })
   .catch((err) => {
     console.log(err);

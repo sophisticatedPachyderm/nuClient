@@ -36,7 +36,9 @@ class card extends Component {
 
     return (
        <TouchableHighlight style={[styles.card, {backgroundColor: color}]} onPress={() => action(this.props.card, index)}>
-        <Text style={styles.val}>{value}</Text>
+        <Text style={styles.val}>
+          {value}
+        </Text>
       </TouchableHighlight>
     );
   }
