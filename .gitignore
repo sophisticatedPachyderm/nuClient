@@ -2,6 +2,14 @@
 #
 .DS_Store
 
+# App
+#
+.tags
+.tags1
+temp.js
+data.js
+
+
 # Xcode
 #
 build/
