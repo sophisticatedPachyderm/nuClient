@@ -1,12 +1,11 @@
 const OpenGames = require('../openGames/openGames');
+const Create = require('../create/create');
 
 parentSetState = (key, value, context) => {
   let obj = {};
   obj[key] = value;
   context.setState(obj);
 }
-
-const cachedGames = [];
 
 // --- send a fetch request to the server to check the credentials --- //
 sendAuthCheck = (username, password, context) => {
@@ -39,9 +38,12 @@ sendAuthCheck = (username, password, context) => {
 }
 
 // --- send a fetch request to the server to check the credentials --- //
-openCreateScreen = () => {
-  console.log('and on the 8th day...');
-}
+openCreateScreen = (context) => {
+  context.props.navigator.push({
+    title: 'Create User',
+    component: Create,
+  });
+};
 
 openMyGamesScreen = (valid, context) => {
   if (valid) {
@@ -61,6 +63,7 @@ openMyGamesScreen = (valid, context) => {
     .then((response) => response.json())
     .then((jsonResponse) => {
       // assign this to the openGames state
+      let cachedGames = [];
       for (let key in jsonResponse) {
         cachedGames.push({
           gameId: key,

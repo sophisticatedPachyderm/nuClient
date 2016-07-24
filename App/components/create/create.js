@@ -13,10 +13,9 @@ const Button = require('../button');
 const NuInput = require('../fullTextInput');
 
 // --- load helper functions --- //
-const _h = require('./loginHelpers')
+const _h = require('./createHelpers')
 
 const {height, width} = Dimensions.get('window');
-
 
 const styles = StyleSheet.create({
   button: {
@@ -33,15 +32,21 @@ const styles = StyleSheet.create({
   input: {
     marginLeft: width * 0.2,
     marginRight: width * 0.2
+  },
+  error: {
+    textAlign: 'center',
+    fontSize: 32,
+    color: '#f00'
   }
 });
 
-class login extends Component {
+class create extends Component {
   constructor(props) {
     super(props);
     this.state = {
       appUsername: '',
       appPassword: '',
+      appConfirm: '',
       appUserId: NaN,
       valid: false,
       error: '',
@@ -61,16 +66,18 @@ class login extends Component {
             title={'password'}
             pw={true}
             callback={(text) => _h.parentSetState('appPassword', text, this)} />
-          <Button
-            caption={'submit'}
-            callback={() => _h.sendAuthCheck(this.state.appUsername, this.state.appPassword, this)} />
+          <NuInput
+            title={'confirm'}
+            pw={true}
+            callback={(text) => _h.parentSetState('appConfirm', text, this)} />
           <Button
             caption={'create'}
-            callback={() => _h.openCreateScreen(this)} />
+            callback={() => _h.createUser(this.state.appUsername, this.state.appPassword, this.state.appConfirm, this)} />
+          <Text style={styles.error}> {this.state.error} </Text>
         </View>
       </View>
     );
   }
 };
 
-module.exports = login;
+module.exports = create;
