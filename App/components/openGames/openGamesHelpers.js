@@ -1,8 +1,90 @@
 const Game = require('../game/game');
+const JoinableGames = require('./joinableGames');
 
-openJoinableGamesScreen = () => {
+openJoinableGamesScreen = (context) => {
   console.log('You\'ve decided to better yourself by joining ANOTHER game');
+  fetch('https://notuno.herokuapp.com/api/game/getOpenGames', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: context.props.appUserId,
+    })
+  })
+  .then((response) => response.json())
+  .then((jsonResponse) => {
+    console.log('jsonR', jsonResponse);
+    let joinableGames = jsonResponse.reduce((arr, game) => {
+
+      // once the server starts sending the usernames in any given game, change the object below to include those usernames
+      console.log('eG', game);
+
+      let obj = {
+        gameId: game.gameId,
+        players: 0,
+      };
+
+      if (game.p0Hand !== null) {
+        obj.players++;
+      } else if (game.p1Hand !== null) {
+        obj.players++;
+      } else if (game.p2Hand !== null) {
+        obj.players++;
+      } else if (game.p3Hand !== null) {
+        obj.players++;
+      }
+
+      arr.push(obj);
+      return arr;
+    }, []);
+    return joinableGames;
+  })
+  .then((joinableGames) => {
+
+    // ====================================================================
+    // We'll be passing down into the game module:
+    // - joinableGames -> the card that's being compared against
+    // ====================================================================
+
+    context.props.navigator.push({
+      title: ('Joinable Games'),
+      component: JoinableGames,
+      passProps: {
+        parentProps: context.props,
+        joinableGames: joinableGames,
+      }
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 }
+
+joinGame = (gameId, context) => {
+  // send the message to the server to join the game
+  fetch('https://notuno.herokuapp.com/api/game/joingame', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      gameId: gameId,
+      userId: context.props.userId,
+    })
+  })
+  .then((response) => {
+    // here, I actually want to refresh the
+    context.props.navigator.pop();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+}
+
 
 chooseGame = (gameId, context) => {
   console.log('you chose game', gameId);

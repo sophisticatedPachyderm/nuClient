@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 
 const Card = require('./card');
-// const PopUp = require('./popup');
+const PopUp = require('./popup');
 const OppView = require('./opponentView');
+const GamePlayState = require('./gamePlayState');
 
 const _h = require('./gameHelpers');
 
@@ -56,8 +57,9 @@ class game extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // the challenge will be to figure out how to set up the props to come in as default state
+      warning: '',
       currentCard: this.props.currentCard,
+      currentHand: this.props.userCards,
     };
   }
 
@@ -70,6 +72,7 @@ class game extends Component {
               action={() => _h.chooseCard(card, index, this)}
               colors={colorConverter} />;
           });
+    console.log(this.props);
 
     const {topPlayer, leftPlayer, rightPlayer} = this.props.assignedPlayers;
 
@@ -84,6 +87,7 @@ class game extends Component {
             {this.state.currentCard[0]}
           </Text>
         </View>
+        <Text style={styles.warning}> {this.state.warning} </Text>
         <ScrollView style={styles.hand} horizontal={true}>
           {cardsArray}
         </ScrollView>

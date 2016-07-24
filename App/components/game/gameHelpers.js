@@ -1,5 +1,4 @@
 chooseCard = (card, index, context) => {
-
   if (cardLogic(context.state.currentCard, card)) {
     context.setState({currentCard: card});
     // now send this choice to the server
@@ -21,6 +20,47 @@ cardLogic = (current, played) => {
   return false;
 }
 
+writePlayersToPositions = (players) => {
+  let output = {};
+
+  for (let p in players) {
+    console.log(players[p].position);
+  	if (p === 'currentPlayer') {
+  		output[players[p].position] = 'bottom';
+  	} else if (p === 'leftPlayer' && players[p].position) {
+  		output[players[p].position] = 'left';
+  	} else if (p === 'rightPlayer' && players[p].position) {
+  		output[players[p].position] = 'right';
+  	} else if (p === 'topPlayer' && players[p].position) {
+  		output[players[p].position] = 'top';
+  	}
+  }
+
+  return output;
+};
+
+chooseImage = (data, loc) => {
+  if(loc === 'direction') {
+    if (data === 0) {
+      return {uri: 'clock.png'};
+    } else {
+      return {uri: 'counter.png'};
+    }
+  } else {
+    if (data === 'top') {
+      return {uri: 'up.png'};
+    } else if (data = 'bottom') {
+      return {uri: 'down.png'};
+    } else if (data = 'left') {
+      return {uri: 'left.png'};
+    } else if (data = 'right') {
+      return {uri: 'right.png'};
+    }
+  }
+}
+
 module.exports = {
   chooseCard: chooseCard,
+  writePlayersToPositions: writePlayersToPositions,
+  chooseImage: chooseImage,
 }

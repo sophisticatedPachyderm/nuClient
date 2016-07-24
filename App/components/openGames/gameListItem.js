@@ -14,7 +14,7 @@ const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   gameContainer: {
     padding: 24,
-    flex: 0.2,
+    flex: 0.95,
   },
   gameId: {
     fontSize: 24,
@@ -46,9 +46,15 @@ class gameListItem extends Component {
       3: '#FFEB3B',
     }
 
-    let players = game.players.map((person, index) => {
+    let players;
+
+    if (Array.isArray(game.players)) {
+      players = game.players.map((person, index) => {
         return <Text key={index} style={styles.player}>{person}</Text>
-    });
+      });
+    } else {
+      players = <Text> this game has {game.players} player(s) </Text>
+    }
 
     return (
       <TouchableHighlight style={styles.container} onPress={() => callback(game.gameId)}>

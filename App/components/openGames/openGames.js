@@ -53,7 +53,7 @@ class openGames extends Component {
         <View style={{flex:0.15}}>
           <Button
             caption={'Join another Game'}
-            callback={() => _h.openJoinableGamesScreen()} />
+            callback={() => _h.openJoinableGamesScreen(this)} />
         </View>
       </View>
     );
