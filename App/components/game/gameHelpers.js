@@ -1,10 +1,17 @@
 chooseCard = (card, index, context) => {
-  if (!context.state.playable) {
+   if (!context.state.playable) {
     context.setState({warning: 'it is not your turn yet'});
     console.log('it is not your turn yet');
   } else if (!context.state.drawCard) {
     context.setState({warning: 'you need to choose to draw a card'});
     console.log('you need to choose to draw a card');
+  } else if (card[0] === 'wild' || card[0] === 'takeFour') {
+
+    context.setState({currentCard: card, needToChooseColor: true, tempIndex: index});
+    // changing state here ^ will send a new render to the screen
+
+      // get that choice from the user
+
   } else if (cardLogic(context.state.currentCard, card)) {
     context.setState({currentCard: card});
     // now send this choice to the server
@@ -26,7 +33,6 @@ chooseCard = (card, index, context) => {
 
 cardLogic = (current, played) => {
   if (played[1] === 1) {
-    console.log('here we need some action to make the player choose a new color');
     return true;
   }
   else if (current[0] === played[0]) {
@@ -86,9 +92,34 @@ isMyTurn = (context) => {
   }
 }
 
+chooseColor = (color, context) => {
+  let index = context.state.tempIndex;
+  context.ws.send(JSON.stringify({
+    route: 'myTurn',
+    cardIndex: index,
+    userId: context.props.parentProps.appUserId,
+    gameId: context.props.gameId,
+    wildColor: color,
+  }));
+  // set the client to not respond to players touches anymore
+  let temp = context.state.currentHand;
+  temp.splice(index, 1);
+  // set the color to be what we need
+  let tempCard = context.state.currentCard;
+  tempCard[1] = color;
+  // this action basically ends the user's turn
+  context.setState({
+    currentCard: tempCard,
+    playable: false,
+    drawCard: false,
+    currentHand: temp,
+  });
+}
+
 module.exports = {
   chooseCard: chooseCard,
   writePlayersToPositions: writePlayersToPositions,
   chooseImage: chooseImage,
   isMyTurn: isMyTurn,
+  chooseColor: chooseColor,
 }

@@ -11,6 +11,7 @@ import {
 
 const Card = require('./card');
 const PopUp = require('./popup');
+const ChooseColorPopUp = require('./chooseColorPU');
 const Warning = require('./warning');
 const OppView = require('./opponentView');
 const GamePlayState = require('./gamePlayState');
@@ -83,6 +84,7 @@ class game extends Component {
       topPlayer: topPlayer,
       leftPlayer: leftPlayer,
       rightPlayer: rightPlayer,
+      needToChooseColor: false,
     };
 
 
@@ -199,6 +201,10 @@ class game extends Component {
         actionB={() => {
           this.setState({drawCard: true});
         }} />
+    } else if (this.state.needToChooseColor) {
+      notification = <ChooseColorPopUp
+        style={styles.optional}
+        chooseColor={(color) => _h.chooseColor(color, this)} />
     }
 
     return (
