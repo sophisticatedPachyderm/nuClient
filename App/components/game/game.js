@@ -85,7 +85,10 @@ class game extends Component {
       drawCardResponse: {
         mines: (response) => {
           console.log('My draw, server response:', response);
-          console.log(this.state);
+          // this works to rerender the page on draw of card. Do we want to keep
+          let temp = this.state.currentHand;
+          temp.push(response.cardDrawn);
+          this.setState({currentHand: temp});
         },
         opponent: (response) => {
           console.log('what happens here?', response.response);
@@ -102,7 +105,7 @@ class game extends Component {
     // --- shouldn't have to worry about 0 length, //
     // --- because then the game is over       --- //
 
-    let cardsArray = this.props.userCards.map((card, index) => {
+    let cardsArray = this.state.currentHand.map((card, index) => {
             return <Card
               key={index}
               card={card}
@@ -119,8 +122,8 @@ class game extends Component {
 
     if (!this.state.playable) {
       notification = <Warning style={styles.optional}
-        title={context.state.popUpMessage}
-        warning={context.state.warning} />
+        title={this.state.popUpMessage}
+        warning={this.state.warning} />
     } else if (this.state.playable && !this.state.drawCard){
       notification =
       <PopUp style={styles.optional} title={'Play card or draw?'}
