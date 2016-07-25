@@ -53,6 +53,7 @@ const colorConverter = {
   r: '#F44336',
   y: '#FFEB3B',
   1: '#555',
+  '1': '#555',
 }
 
 class game extends Component {
@@ -141,7 +142,7 @@ class game extends Component {
       }
     });
 
-    this.state.ws = ws;
+    this.ws = ws;
   }
 
 
@@ -174,7 +175,7 @@ class game extends Component {
       <PopUp style={styles.optional} title={'Play card or draw?'}
         textA={'Draw new card'}
         actionA={() => {
-          this.state.ws.send(JSON.stringify({
+          this.ws.send(JSON.stringify({
             route: 'drawCard',
             userId: this.props.parentProps.appUserId,
             gameId: +this.props.gameId,

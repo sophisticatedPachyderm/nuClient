@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 class card extends Component {
   render() {
     const {index, card, action, colors} = this.props;
-    const color = colors[card[1]];
+    const color = colors[card[1]+''];
     const value = card[0];
 
     return (

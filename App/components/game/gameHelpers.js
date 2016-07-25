@@ -8,7 +8,12 @@ chooseCard = (card, index, context) => {
   } else if (cardLogic(context.state.currentCard, card)) {
     context.setState({currentCard: card});
     // now send this choice to the server
-
+    context.ws.send(JSON.stringify({
+      route: 'myTurn',
+      cardIndex: index,
+      userId: context.props.parentProps.appUserId,
+      gameId: context.props.gameId,
+    }));
     // set the client to not respond to players touches anymore
     // this action basically ends the user's turn
     context.setState({playable: false, drawCard: false});
