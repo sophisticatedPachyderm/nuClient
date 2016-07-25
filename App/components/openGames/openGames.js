@@ -5,7 +5,7 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ScrollView,
+  ListView,
 } from 'react-native';
 
 const {height, width} = Dimensions.get('window');
@@ -24,36 +24,47 @@ const _h = require('./openGamesHelpers');
 //
 
 const styles = StyleSheet.create({
-
+  error: {
+    textAlign: 'center',
+    color: '#f00',
+    fontWeight: 'bold'
+  }
 });
 
 class openGames extends Component {
   constructor(props) {
     super(props);
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
-      openGames: [],
+      openGames: ds.cloneWithRows(this.props.openGames),
+      error: ''
     }
   }
 
   render() {
-    let games = this.props.openGames.map((game, index) => {
-      return <GameListItem
-                key={index}
-                index={index}
-                game={game}
-                userId={this.props.appUserId}
-                callback={() => chooseGame(game.gameId, this)} />
-    });
     return (
       <View style={{flex: 1}}>
         <View style={{flex:0.1}} />
-        <ScrollView style={{flex:0.75}}>
-          {games}
-        </ScrollView>
+          <ListView
+            style={{flex:0.75}}
+            dataSource={this.state.openGames}
+            renderRow={(game, index) => <GameListItem
+                      index={index}
+                      game={game}
+                      userId={this.props.appUserId}
+                      callback={() => {
+                        if (game.players.length > 1) {
+                          chooseGame(game.gameId, this);
+                        } else {
+                          this.setState({error: 'unable to join with only one player'});
+                        }
+                      }} />}
+          />
         <View style={{flex:0.15}}>
           <Button
             caption={'Join another Game'}
             callback={() => _h.openJoinableGamesScreen(this)} />
+          <Text style={styles.error}> {this.state.error} </Text>
         </View>
       </View>
     );

@@ -19,7 +19,6 @@ openJoinableGamesScreen = (context) => {
     let joinableGames = jsonResponse.reduce((arr, game) => {
 
       // once the server starts sending the usernames in any given game, change the object below to include those usernames
-      console.log('eG', game);
 
       let obj = {
         gameId: game.gameId,
@@ -168,4 +167,5 @@ chooseGame = (gameId, context) => {
 module.exports = {
   openJoinableGamesScreen: openJoinableGamesScreen,
   chooseGame: chooseGame,
+  joinGame: joinGame,
 }

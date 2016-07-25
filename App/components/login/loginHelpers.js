@@ -63,14 +63,14 @@ openMyGamesScreen = (valid, context) => {
     .then((response) => response.json())
     .then((jsonResponse) => {
       // assign this to the openGames state
-      let cachedGames = [];
+      let openGames = [];
       for (let key in jsonResponse) {
-        cachedGames.push({
+        openGames.push({
           gameId: key,
           players: jsonResponse[key].usernameList,
         });
       }
-      return cachedGames;
+      return openGames;
     })
     .then((openGames) => {
       context.props.navigator.push({
@@ -111,9 +111,9 @@ createNewGame = (userId) => {
       userId: userId,
     })
   })
-  .then((response) => {
-    console.log(response);
-    console.log(response.json());
+  .then((response) => response.json())
+  .then((jsonResponse) => {
+    console.log(jsonResponse);
   })
   .catch((err) => {
     console.log(err);

@@ -33,6 +33,10 @@ const styles = StyleSheet.create({
   input: {
     marginLeft: width * 0.2,
     marginRight: width * 0.2
+  },
+  error: {
+    textAlign: 'center',
+    color: '#f00',
   }
 });
 
@@ -45,6 +49,12 @@ class login extends Component {
       appUserId: NaN,
       valid: false,
       error: '',
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.error !== '') {
+      setTimeout(() => this.setState({error: ''}), 5000);
     }
   }
 
@@ -63,10 +73,18 @@ class login extends Component {
             callback={(text) => _h.parentSetState('appPassword', text, this)} />
           <Button
             caption={'submit'}
-            callback={() => _h.sendAuthCheck(this.state.appUsername, this.state.appPassword, this)} />
+            callback={() => {
+              if(this.state.appUsername !== '' && this.state.appPassword !== '') {
+                _h.sendAuthCheck(this.state.appUsername, this.state.appPassword, this)
+              } else {
+                this.setState({error: 'Cannot submit empty username or password'});
+              }
+            }} />
+
           <Button
             caption={'create'}
             callback={() => _h.openCreateScreen(this)} />
+          <Text style={styles.error}> {this.state.error} </Text>
         </View>
       </View>
     );

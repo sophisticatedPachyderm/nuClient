@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
+  ListView,
 } from 'react-native';
 
 const {height, width} = Dimensions.get('window');
@@ -14,6 +15,8 @@ const {height, width} = Dimensions.get('window');
 const GameListItem = require('./gameListItem');
 
 const _h = require('./openGamesHelpers');
+
+console.log(_h);
 
 //
 // From props, you have access to:
@@ -32,35 +35,30 @@ const styles = StyleSheet.create({
 class joinableGames extends Component {
   constructor(props) {
     super(props);
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
-      joinableGames: this.props.joinableGames,
+      joinableGames: ds.cloneWithRows(this.props.joinableGames),
     }
   }
 
 
   render() {
-    console.log(this.props)
-    const joinableGames = this.state.joinableGames;
-    let games;
-    if (joinableGames.length === 0) {
-      console.log('no available games');
-    } else {
-      games = joinableGames.map((game, index) => {
-        console.log(game)
-        return <GameListItem
-          key={index}
-          index={index}
-          game={game}
-          callback={() => console.log('yay')}/>
-      });
-    }
     return (
-      <View style={styles.container}>
-        <ScrollView style={{flex:1}}>
-          {games}
-        </ScrollView>
+      <View style={{flex: 1}}>
+        <View style={{flex:0.1}} />
+          <ListView
+            style={{flex:0.75}}
+            dataSource={this.state.joinableGames}
+            renderRow={(game, index) => <GameListItem
+                      index={index}
+                      game={game}
+                      userId={this.props.parentProps.appUserId}
+                      callback={() => _h.joinGame(game.gameId, this)} />}
+          />
+        <View style={{flex:0.15}}>
+        </View>
       </View>
-    )
+    );
   }
 };
 
