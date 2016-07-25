@@ -1,9 +1,14 @@
-chooseCard = (card, index, playable, context) => {
-  if (!playable) {
+chooseCard = (card, index, context) => {
+  if (!context.state.playable) {
     context.setState({warning: 'it is not your turn yet'});
+    console.log('it is not your turn yet');
+  } else if (!context.state.drawCard) {
+    context.setState({warning: 'you need to choose to draw a card'});
+    console.log('you need to choose to draw a card');
   } else if (cardLogic(context.state.currentCard, card)) {
     context.setState({currentCard: card});
     // now send this choice to the server
+
   } else {
     console.log('invalid choice!');
   }
@@ -61,8 +66,19 @@ chooseImage = (data, loc) => {
   }
 }
 
+isMyTurn = (context) => {
+  if (context.props.myPosition !== context.props.activePlayer) {
+    notification = <Warning style={styles.optional}
+      title={context.state.popUpMessage}
+      warning={context.state.warning} />
+  } else {
+    context.setState({playable:true});
+  }
+}
+
 module.exports = {
   chooseCard: chooseCard,
   writePlayersToPositions: writePlayersToPositions,
   chooseImage: chooseImage,
+  isMyTurn: isMyTurn,
 }

@@ -14,9 +14,8 @@ const {height, width} = Dimensions.get('window');
 // --- load other components --- //
 const GameListItem = require('./gameListItem');
 
-const _h = require('./openGamesHelpers');
+const _h = require('./joinGameHelpers');
 
-console.log(_h);
 
 //
 // From props, you have access to:
