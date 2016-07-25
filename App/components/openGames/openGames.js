@@ -54,7 +54,10 @@ class openGames extends Component {
                       userId={this.props.appUserId}
                       callback={() => {
                         if (game.players.length > 1) {
-                          chooseGame(game.gameId, this);
+                          _h.startGame(game.gameId, this, () => {
+                            chooseGame(game.gameId, this);
+                          });
+                          // chooseGame(game.gameId, this);
                         } else {
                           this.setState({error: 'unable to join with only one player'});
                         }
