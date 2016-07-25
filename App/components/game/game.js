@@ -61,14 +61,21 @@ class game extends Component {
       warning: '',
       currentCard: this.props.currentCard,
       currentHand: this.props.userCards,
+      // playable means it is current this player's turn
       playable: false,
+      // draw card means you've made the decision to play a card in your hand
+      drawCard: false,
       popUpMessage: 'opponent\'s turn',
     };
-    console.log(this.props)
-    let ws = wsInit(this.props.userId, {
+
+    if (props.myPosition === props.activePlayer) {
+      this.state.playable = true;
+    }
+
+    let ws = wsInit(props.parentProps.appUserId, {
       myTurnResponse: {
         mines: (response) => {
-          console.log('My turn, server response:', response.response);
+          console.log('My turn, server response:', response);
         },
         opponent: (response) => {
           console.log('This shouldn\'t be coming though');
@@ -77,14 +84,18 @@ class game extends Component {
 
       drawCardResponse: {
         mines: (response) => {
-          console.log('My draw, server response:', response.response);
+          console.log('My draw, server response:', response);
+          console.log(this.state);
         },
         opponent: (response) => {
           console.log('what happens here?', response.response);
         }
       }
     });
+
+    this.state.ws = ws;
   }
+
 
   render() {
     // --- create the cards in a player's hand --- //
@@ -96,35 +107,39 @@ class game extends Component {
               key={index}
               card={card}
               index={index}
-              action={() => _h.chooseCard(card, index, this.state.playable, this)}
+              action={() => _h.chooseCard(card, index, this)}
               colors={colorConverter} />;
           });
-
 
     // --- strip out the players to use for the opponenet views --- //
     const {topPlayer, leftPlayer, rightPlayer} = this.props.assignedPlayers;
 
     // --- set up the popup to block invalid moves --- //
-
     let notification;
 
-    if (this.props.myPosition !== this.props.activePlayer) {
+    if (!this.state.playable) {
       notification = <Warning style={styles.optional}
-        title={this.state.popUpMessage}
-        warning={this.state.warning} />
-    } else {
-      this.setState({playable:true});
+        title={context.state.popUpMessage}
+        warning={context.state.warning} />
+    } else if (this.state.playable && !this.state.drawCard){
+      notification =
+      <PopUp style={styles.optional} title={'Play card or draw?'}
+        textA={'Draw new card'}
+        actionA={() => {
+          this.state.ws.send(JSON.stringify({
+            route: 'drawCard',
+            userId: this.props.parentProps.appUserId,
+            gameId: +this.props.gameId,
+          }));
+          // this will also need to act on the response that the server sends
+        }}
+        textB={'Play card from hand'}
+        actionB={() => {
+          this.setState({drawCard: true});
+        }} />
     }
-    console.log(this.props.myPosition);
-    console.log(this.props.activePlayer);
 
-    // if (this.state.popUp) {
-      // popup will be there
-      // if (my turn)
-        // chose whether to draw a card or play one that you already have
-      // else
-        // display message that it's not your turn
-    // }
+    console.log(this.props);
 
     return (
       <View style={styles.container}>
