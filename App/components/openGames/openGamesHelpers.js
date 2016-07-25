@@ -87,7 +87,6 @@ joinGame = (gameId, context) => {
 
 
 chooseGame = (gameId, context) => {
-  console.log('you chose game', gameId);
   fetch('https://notuno.herokuapp.com/api/game/getgame', {
       method: 'POST',
       headers: {
@@ -100,7 +99,6 @@ chooseGame = (gameId, context) => {
     })
     .then((response) => response.json())
     .then((parsedResponse) => {
-      console.log(parsedResponse);
       // get the current card to pass down to the game application
       let currentCard = JSON.parse(parsedResponse.playedCards);
       currentCard = currentCard[currentCard.length-1];
