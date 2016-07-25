@@ -83,7 +83,8 @@ openMyGamesScreen = (valid, context) => {
         },
         rightButtonTitle: 'add',
         onRightButtonPress: () => {
-          console.log('I made a game, you should probably change this.');
+          console.log('game created');
+          createNewGame(context.state.appUserId);
         },
       });
     })
@@ -98,6 +99,26 @@ openMyGamesScreen = (valid, context) => {
     console.log('seems fishy')
   }
 };
+
+createNewGame = (userId) => {
+  fetch('https://notuno.herokuapp.com/api/game/creategame', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: userId,
+    })
+  })
+  .then((response) => {
+    console.log(response);
+    console.log(response.json());
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+}
 
 module.exports = {
   parentSetState: parentSetState,
