@@ -63,14 +63,14 @@ openMyGamesScreen = (valid, context) => {
     .then((response) => response.json())
     .then((jsonResponse) => {
       // assign this to the openGames state
-      let cachedGames = [];
+      let openGames = [];
       for (let key in jsonResponse) {
-        cachedGames.push({
+        openGames.push({
           gameId: key,
           players: jsonResponse[key].usernameList,
         });
       }
-      return cachedGames;
+      return openGames;
     })
     .then((openGames) => {
       context.props.navigator.push({
@@ -83,7 +83,8 @@ openMyGamesScreen = (valid, context) => {
         },
         rightButtonTitle: 'add',
         onRightButtonPress: () => {
-          console.log('I made a game, you should probably change this.');
+          console.log('game created');
+          createNewGame(context.state.appUserId);
         },
       });
     })
@@ -98,6 +99,26 @@ openMyGamesScreen = (valid, context) => {
     console.log('seems fishy')
   }
 };
+
+createNewGame = (userId) => {
+  fetch('https://notuno.herokuapp.com/api/game/creategame', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: userId,
+    })
+  })
+  .then((response) => response.json())
+  .then((jsonResponse) => {
+    console.log(jsonResponse);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+}
 
 module.exports = {
   parentSetState: parentSetState,

@@ -1,5 +1,7 @@
-chooseCard = (card, index, context) => {
-  if (cardLogic(context.state.currentCard, card)) {
+chooseCard = (card, index, playable, context) => {
+  if (!playable) {
+    context.setState({warning: 'it is not your turn yet'});
+  } else if (cardLogic(context.state.currentCard, card)) {
     context.setState({currentCard: card});
     // now send this choice to the server
   } else {

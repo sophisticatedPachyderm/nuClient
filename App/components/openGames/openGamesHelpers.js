@@ -19,7 +19,6 @@ openJoinableGamesScreen = (context) => {
     let joinableGames = jsonResponse.reduce((arr, game) => {
 
       // once the server starts sending the usernames in any given game, change the object below to include those usernames
-      console.log('eG', game);
 
       let obj = {
         gameId: game.gameId,
@@ -87,7 +86,6 @@ joinGame = (gameId, context) => {
 
 
 chooseGame = (gameId, context) => {
-  console.log('you chose game', gameId);
   fetch('https://notuno.herokuapp.com/api/game/getgame', {
       method: 'POST',
       headers: {
@@ -100,7 +98,6 @@ chooseGame = (gameId, context) => {
     })
     .then((response) => response.json())
     .then((parsedResponse) => {
-      console.log(parsedResponse);
       // get the current card to pass down to the game application
       let currentCard = JSON.parse(parsedResponse.playedCards);
       currentCard = currentCard[currentCard.length-1];
@@ -170,4 +167,5 @@ chooseGame = (gameId, context) => {
 module.exports = {
   openJoinableGamesScreen: openJoinableGamesScreen,
   chooseGame: chooseGame,
+  joinGame: joinGame,
 }
