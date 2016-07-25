@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     borderRadius: 6,
     padding: 12,
-    width: width * 0.15,
+    width: width * 0.33,
   },
   oppText: {
     fontSize:24,
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   top: {
     position: 'absolute',
     top: 22,
-    left: width * 0.425,
+    left: width * 0.325,
     justifyContent: 'center',
     zIndex: 100,
   },
@@ -45,7 +45,12 @@ const styles = StyleSheet.create({
   currentPlayer: {
     backgroundColor: '#000',
     color:'#fff',
-  }
+  },
+  username: {
+    fontSize:18,
+    color:'#fff',
+    textAlign: 'center',
+  },
 });
 
 class opponentView extends Component {
@@ -55,6 +60,7 @@ class opponentView extends Component {
       return (
          <View style={[styles[this.props.loc], styles.oppView]}>
           <Text style={styles.oppText}>{hand.length}</Text>
+          <Text style={styles.username}>{this.props.player.username}</Text>
          </View>
      );
     } else {
