@@ -1,3 +1,7 @@
+const _h  = require('../login/loginHelpers');
+
+console.log(_h);
+
 joinGame = (gameId, context) => {
   // send the message to the server to join the game
   fetch('https://notuno.herokuapp.com/api/game/joingame', {
@@ -8,12 +12,13 @@ joinGame = (gameId, context) => {
     },
     body: JSON.stringify({
       gameId: gameId,
-      userId: context.props.userId,
+      userId: context.props.parentProps.userId,
     })
   })
   .then((response) => {
     // here, I actually want to refresh the
     context.props.navigator.pop();
+    _h.openMyGamesScreen(true, context);
   })
   .catch((err) => {
     console.log(err);
@@ -21,4 +26,6 @@ joinGame = (gameId, context) => {
 
 }
 
-module.exports = joinGame;
+module.exports = {
+  joinGame: joinGame
+};

@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
 class opponentView extends Component {
   render() {
     if (this.props.player) {
-      console.log('oppview', this.props.player.hand);
       let hand = this.props.player.hand;
       return (
          <View style={[styles[this.props.loc], styles.oppView]}>
