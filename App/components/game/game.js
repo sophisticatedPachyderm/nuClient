@@ -61,9 +61,11 @@ class game extends Component {
       warning: '',
       currentCard: this.props.currentCard,
       currentHand: this.props.userCards,
+      // playable means it is current this player's turn
       playable: false,
-      popUpMessage: 'opponent\'s turn',
+      // draw card means you've made the decision to play a card in your hand
       drawCard: false,
+      popUpMessage: 'opponent\'s turn',
     };
 
     if (props.myPosition === props.activePlayer) {
@@ -134,7 +136,6 @@ class game extends Component {
         textB={'Play card from hand'}
         actionB={() => {
           this.setState({drawCard: true});
-          console.log('play card now');
         }} />
     }
 

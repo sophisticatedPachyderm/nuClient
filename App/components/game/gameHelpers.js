@@ -9,6 +9,8 @@ chooseCard = (card, index, context) => {
     context.setState({currentCard: card});
     // now send this choice to the server
 
+    // set the client to not respond to players touches anymore
+    context.setState({playable: false, drawCard: false});
   } else {
     console.log('invalid choice!');
   }
