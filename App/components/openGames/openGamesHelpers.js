@@ -138,9 +138,36 @@ chooseGame = (gameId, context) => {
     })
 }
 
+startGame = (gameId, context, cb) => {
+  console.log(gameId, context.props.appUserId);
+  fetch('https://notuno.herokuapp.com/api/game/startgame', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: context.props.appUserId,
+      gameId: gameId,
+    }),
+  })
+  .then((response) => response.json())
+  .then((responseJson) => {
+    if (responseJson.error === 'Game has already started!') {
+      cb();
+    } else {
+      console.log(responseJson);
+    }
+  })
+  .catch((err) => {
+    console.log(err, 'error starting game');
+    cb();
+  });
+};
 
 module.exports = {
   openJoinableGamesScreen: openJoinableGamesScreen,
   chooseGame: chooseGame,
   joinGame: joinGame,
+  startGame: startGame,
 }

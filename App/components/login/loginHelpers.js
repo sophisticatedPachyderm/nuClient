@@ -120,9 +120,37 @@ createNewGame = (userId) => {
   })
 }
 
+startGame = (gameId, context, cb) => {
+  console.log(gameId, context.state.appUserId);
+  fetch('https://notuno.herokuapp.com/api/game/startgame', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: context.state.appUserId,
+      gameId: gameId,
+    }),
+  })
+  .then((response) => response.json())
+  .then((responseJson) => {
+    if (responseJson.error === 'Game has already started!') {
+      cb();
+    } else {
+      console.log(responseJson);
+    }
+  })
+  .catch((err) => {
+    console.log(err, 'error starting game');
+    cb();
+  });
+};
+
 module.exports = {
   parentSetState: parentSetState,
   sendAuthCheck: sendAuthCheck,
   openCreateScreen: openCreateScreen,
   openMyGamesScreen: openMyGamesScreen,
+  startGame: startGame,
 }
