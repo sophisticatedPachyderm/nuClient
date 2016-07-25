@@ -97,7 +97,7 @@ class game extends Component {
         },
         opponent: (response) => {
           console.log('This shouldn\'t be coming though');
-
+          console.log('myTurn opponent response', '\n', response);
           // 1) update the currentCard  -> set state here
           var newCurrentCard = response.playedCards.pop();
           console.log('newCurrentCard:', newCurrentCard);
@@ -109,12 +109,12 @@ class game extends Component {
           if (Number(response.currentPlayer) === this.props.myPosition) {
             console.log('Its my turn now!');
             this.setState({playable: true});
-          }
 
-          // 4) check if i was forced to draw cards -> update your own hand  --> set state here
-          if (newCurrentCard[0] === 'takeTwo' || newCurrentCard[0] === 'takeFour') {
-            console.log('i drew cards:', response.nextHand);
-            this.setState({currentHand: response.nextHand});
+            // 4) check if i was forced to draw cards -> update your own hand  --> set state here
+            if (newCurrentCard[0] === 'takeTwo' || newCurrentCard[0] === 'takeFour') {
+              console.log('i drew cards:', response.nextHand);
+              this.setState({currentHand: response.nextHand});
+            }
           }
 
         }
@@ -200,8 +200,6 @@ class game extends Component {
           this.setState({drawCard: true});
         }} />
     }
-
-    console.log(this.props);
 
     return (
       <View style={styles.container}>

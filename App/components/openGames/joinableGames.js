@@ -16,7 +16,6 @@ const GameListItem = require('./gameListItem');
 
 const _h = require('./joinGameHelpers');
 
-
 //
 // From props, you have access to:
 //  - username -> this.props.appUsername

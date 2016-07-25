@@ -15,7 +15,6 @@ openJoinableGamesScreen = (context) => {
   })
   .then((response) => response.json())
   .then((jsonResponse) => {
-    console.log('jsonR', jsonResponse);
     let joinableGames = jsonResponse.reduce((arr, game) => {
 
       // once the server starts sending the usernames in any given game, change the object below to include those usernames
