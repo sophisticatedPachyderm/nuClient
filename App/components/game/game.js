@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { writePlayersToPositions } from './gameHelpers.js';
 
 import {
   Text,
@@ -17,7 +18,7 @@ const GamePlayState = require('./gamePlayState');
 const _h = require('./gameHelpers');
 const wsInit = require('../../socket/socketInit');
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
@@ -57,6 +58,7 @@ const colorConverter = {
 class game extends Component {
   constructor(props) {
     super(props);
+    let { topPlayer, leftPlayer, rightPlayer } = props.assignedPlayers;
     this.state = {
       warning: '',
       currentCard: this.props.currentCard,
@@ -66,7 +68,11 @@ class game extends Component {
       // draw card means you've made the decision to play a card in your hand
       drawCard: false,
       popUpMessage: 'opponent\'s turn',
+      topPlayer: topPlayer,
+      leftPlayer: leftPlayer,
+      rightPlayer: rightPlayer,
     };
+
 
     if (props.myPosition === props.activePlayer) {
       this.state.playable = true;
@@ -84,7 +90,7 @@ class game extends Component {
           var newCurrentCard = response.playedCards.pop();
           console.log('newCurrentCard:', newCurrentCard);
           this.setState({currentCard: newCurrentCard});
-          
+
           // 2) update # cards in opponenets hand
 
           // 3) check if my turn  -- set state here
@@ -112,7 +118,25 @@ class game extends Component {
         },
         opponent: (response) => {
           console.log('what happens here?', response.response);
-          // 1) rerender opponents card count
+          let tempArr = ['topPlayer', 'leftPlayer', 'rightPlayer'];
+          for (let i = 0; i < tempArr.length; i++) {
+            if (response.userId === this.state[tempArr[i]].userId) {
+              let temp = this.state[tempArr[i]];
+              temp.hand.push(response.cardDrawn);
+              let key = tempArr[i];
+              this.setState({
+                key: temp,
+              });
+            }
+          }
+          //---- this may need to be replicated 3 times if the above does not work -----
+          // if (response.userId === this.state.topPlayer.userId) {
+          //   let temp = this.state.topPlayer;
+          //   temp.hand.push(response.cardDrawn);
+          //   this.setState({
+          //     topPlayer: temp,
+          //   });
+          // }
         }
       }
     });
@@ -136,7 +160,7 @@ class game extends Component {
           });
 
     // --- strip out the players to use for the opponenet views --- //
-    const {topPlayer, leftPlayer, rightPlayer} = this.props.assignedPlayers;
+    let {topPlayer, leftPlayer, rightPlayer} = this.props.assignedPlayers;
 
     // --- set up the popup to block invalid moves --- //
     let notification;
