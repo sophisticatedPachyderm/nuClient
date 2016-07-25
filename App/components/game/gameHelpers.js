@@ -15,8 +15,10 @@ chooseCard = (card, index, context) => {
       gameId: context.props.gameId,
     }));
     // set the client to not respond to players touches anymore
+    let temp = context.state.currentHand;
+    temp.splice(index, 1);
     // this action basically ends the user's turn
-    context.setState({playable: false, drawCard: false});
+    context.setState({playable: false, drawCard: false, currentHand: temp});
   } else {
     console.log('invalid choice!');
   }
