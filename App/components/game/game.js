@@ -60,6 +60,17 @@ class game extends Component {
   constructor(props) {
     super(props);
     let { topPlayer, leftPlayer, rightPlayer } = props.assignedPlayers;
+
+    if (topPlayer) {
+      topPlayer.hand = JSON.parse(topPlayer.hand);
+    }
+    if (leftPlayer) {
+      leftPlayer.hand = JSON.parse(leftPlayer.hand);
+    }
+    if (rightPlayer) {
+      rightPlayer.hand = JSON.parse(rightPlayer.hand);
+    }
+
     this.state = {
       warning: '',
       currentCard: this.props.currentCard,
@@ -92,7 +103,7 @@ class game extends Component {
           console.log('newCurrentCard:', newCurrentCard);
           this.setState({currentCard: newCurrentCard});
 
-          // 2) update # cards in opponenets hand
+          // 2) update # cards in opponents hand
 
           // 3) check if my turn  -- set state here
           if (Number(response.currentPlayer) === this.props.myPosition) {
@@ -121,13 +132,15 @@ class game extends Component {
           console.log('what happens here?', response.response);
           let tempArr = ['topPlayer', 'leftPlayer', 'rightPlayer'];
           for (let i = 0; i < tempArr.length; i++) {
-            if (response.userId === this.state[tempArr[i]].userId) {
+            if (this.state[tempArr[i]] && response.userId === this.state[tempArr[i]].userId) {
               let temp = this.state[tempArr[i]];
+              console.log('ABABABABAB', temp);
               temp.hand.push(response.cardDrawn);
               let key = tempArr[i];
-              this.setState({
-                key: temp,
-              });
+              let obj = {};
+              obj[key] = temp;
+              console.log('BCBCBCBCBCBC', obj);
+              this.setState(obj);
             }
           }
           //---- this may need to be replicated 3 times if the above does not work -----
