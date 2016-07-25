@@ -10,6 +10,7 @@ chooseCard = (card, index, context) => {
     // now send this choice to the server
 
     // set the client to not respond to players touches anymore
+    // this action basically ends the user's turn
     context.setState({playable: false, drawCard: false});
   } else {
     console.log('invalid choice!');
