@@ -45,6 +45,11 @@ const styles = StyleSheet.create({
   optional: {
     justifyContent: 'center',
     margin: width * 0.1,
+  },
+  username: {
+    textAlign: 'center',
+    color: '#000',
+    fontSize: 24,
   }
 });
 
@@ -136,12 +141,10 @@ class game extends Component {
           for (let i = 0; i < tempArr.length; i++) {
             if (this.state[tempArr[i]] && response.userId === this.state[tempArr[i]].userId) {
               let temp = this.state[tempArr[i]];
-              console.log('ABABABABAB', temp);
               temp.hand.push(response.cardDrawn);
               let key = tempArr[i];
               let obj = {};
               obj[key] = temp;
-              console.log('BCBCBCBCBCBC', obj);
               this.setState(obj);
             }
           }
@@ -207,6 +210,8 @@ class game extends Component {
         chooseColor={(color) => _h.chooseColor(color, this)} />
     }
 
+    console.log(this.props);
+
     return (
       <View style={styles.container}>
         <View style={{flex:0.25}} />
@@ -219,6 +224,7 @@ class game extends Component {
           </Text>
           { notification }
         </View>
+        <Text style={styles.username}>{this.props.parentProps.appUsername}</Text>
         <ScrollView style={styles.hand} horizontal={true}>
           {cardsArray}
         </ScrollView>

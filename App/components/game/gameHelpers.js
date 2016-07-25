@@ -8,9 +8,6 @@ chooseCard = (card, index, context) => {
   } else if (card[0] === 'wild' || card[0] === 'takeFour') {
 
     context.setState({currentCard: card, needToChooseColor: true, tempIndex: index});
-    // changing state here ^ will send a new render to the screen
-
-      // get that choice from the user
 
   } else if (cardLogic(context.state.currentCard, card)) {
     context.setState({currentCard: card});
@@ -113,6 +110,7 @@ chooseColor = (color, context) => {
     playable: false,
     drawCard: false,
     currentHand: temp,
+    needToChooseColor: false,
   });
 }
 
