@@ -1,4 +1,4 @@
-const _h  = require('../login/loginHelpers');
+const {openMyGamesScreen} = require('../login/loginHelpers.js');
 
 
 joinGame = (gameId, context) => {

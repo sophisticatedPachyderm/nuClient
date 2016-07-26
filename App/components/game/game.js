@@ -101,6 +101,38 @@ class game extends Component {
       myTurnResponse: {
         mines: (response) => {
           console.log('My turn, server response:', response);
+
+          var newCurrentCard = response.playedCards.pop();
+
+          if (Number(response.currentPlayer) === this.props.myPosition) {
+            
+          } else {
+            //sone one else is next
+            if (newCurrentCard[0] === 'takeTwo' || newCurrentCard[0] === 'takeFour') {
+
+              let takeCount = {
+                'takeTwo': 2,
+                'takeFour': 4
+              };
+              let count = takeCount[newCurrentCard[0]];
+              //get player whose .postion === currentPlayer
+              let tempArr = ['topPlayer', 'leftPlayer', 'rightPlayer'];
+              for (let i = 0; i < tempArr.length; i++) {
+                if (this.state[tempArr[i]] && response.currentPlayer === this.state[tempArr[i]].position) {
+                  let temp = this.state[tempArr[i]];
+
+                  for (let j = 0; j < count; j++) {
+                    temp.hand.push([0, 'r']);
+                  }
+                  let key = tempArr[i];
+                  let obj = {};
+                  obj[key] = temp;
+                  this.setState(obj);
+                }
+              }
+
+            }
+          }
         },
         opponent: (response) => {
           console.log('This shouldn\'t be coming though');
@@ -111,6 +143,18 @@ class game extends Component {
           this.setState({currentCard: newCurrentCard});
 
           // 2) update # cards in opponents hand
+          //pop off card of response.userId 's hand'
+          let tempArr = ['topPlayer', 'leftPlayer', 'rightPlayer'];
+          for (let i = 0; i < tempArr.length; i++) {
+            if (this.state[tempArr[i]] && response.userId === this.state[tempArr[i]].userId) {
+              let temp = this.state[tempArr[i]];
+              temp.hand.pop();
+              let key = tempArr[i];
+              let obj = {};
+              obj[key] = temp;
+              this.setState(obj);
+            }
+          }
 
           // 3) check if my turn  -- set state here
           if (Number(response.currentPlayer) === this.props.myPosition) {
@@ -121,6 +165,32 @@ class game extends Component {
             if (newCurrentCard[0] === 'takeTwo' || newCurrentCard[0] === 'takeFour') {
               console.log('i drew cards:', response.nextHand);
               this.setState({currentHand: response.nextHand});
+            }
+          } else {
+            //sone one else is next
+            if (newCurrentCard[0] === 'takeTwo' || newCurrentCard[0] === 'takeFour') {
+
+              let takeCount = {
+                'takeTwo': 2,
+                'takeFour': 4
+              };
+              let count = takeCount[newCurrentCard[0]];
+              //get player whose .postion === currentPlayer
+              let tempArr = ['topPlayer', 'leftPlayer', 'rightPlayer'];
+              for (let i = 0; i < tempArr.length; i++) {
+                if (this.state[tempArr[i]] && response.currentPlayer === this.state[tempArr[i]].position) {
+                  let temp = this.state[tempArr[i]];
+
+                  for (let j = 0; j < count; j++) {
+                    temp.hand.push([0, 'r']);
+                  }
+                  let key = tempArr[i];
+                  let obj = {};
+                  obj[key] = temp;
+                  this.setState(obj);
+                }
+              }
+
             }
           }
 
