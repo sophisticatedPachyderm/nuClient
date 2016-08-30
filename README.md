@@ -1,6 +1,9 @@
 #notUno
 definitely not uno, an iOS recreation of a popular card game
 
+#Team
+Duke Pham, Evan Moncuso, Steven Chung
+
 #Purpose
 ##Stack
 For the client, we use React-Native to build an iOS friendly app.
